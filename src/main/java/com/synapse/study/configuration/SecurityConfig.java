@@ -51,7 +51,8 @@ public class SecurityConfig {
             "/api/auth/refresh",
             "/api/auth/logout",
             "/api/categories/**",
-            "/uploads/**"
+            "/uploads/**",
+            "/api/users"
     };
 
     @Bean
