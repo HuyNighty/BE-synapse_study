@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.Set;
 import java.util.UUID;
@@ -16,7 +17,8 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE users SET is_deleted = true, deleted_at = NOW() WHERE id")
+@SQLDelete(sql = "UPDATE users SET is_deleted = true, deleted_at = NOW() WHERE id = ? AND version = ?")
+@SQLRestriction("is_deleted = false")
 public class User extends BaseSoftDeleteEntity {
 
     @Id
@@ -48,6 +50,10 @@ public class User extends BaseSoftDeleteEntity {
 
     @Version
     Long version;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "avatar_id")
+    Asset avatar;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<UserRole> userRoles;

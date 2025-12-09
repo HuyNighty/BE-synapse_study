@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @MappedSuperclass
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BaseSoftDeleteEntity {
+public class BaseSoftDeleteEntity extends BaseEntity{
 
     @Column(name = "deleted_at")
     LocalDateTime deletedAt;

@@ -1,8 +1,6 @@
 package com.synapse.study.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,9 +20,24 @@ public class BaseEntity {
 
     @CreatedDate
     @Column(name="created_at", nullable = false, updatable = false)
-    LocalDateTime createdDate;
+    LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false, updatable = false)
     LocalDateTime updatedAt;
+
+    @PrePersist
+    public void onPrePersist() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+        if (this.updatedAt == null) {
+            this.updatedAt = LocalDateTime.now();
+        }
+    }
+
+    @PreUpdate
+    public void onPreUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
