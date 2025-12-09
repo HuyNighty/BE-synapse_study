@@ -3,8 +3,10 @@ package com.synapse.study.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.type.SqlTypes;
 
 import java.util.Set;
 import java.util.UUID;
@@ -37,6 +39,7 @@ public class Comment extends BaseSoftDeleteEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     User user;
 
     @ManyToOne(fetch = FetchType.LAZY)

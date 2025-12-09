@@ -3,6 +3,8 @@ package com.synapse.study.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -24,6 +26,7 @@ public class Bookmark {
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
     @JoinColumn(name = "user_id")
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,6 +49,7 @@ public class Bookmark {
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class BookmarkKey implements Serializable {
         @Column(name = "user_id")
+        @JdbcTypeCode(SqlTypes.VARCHAR)
         UUID userId;
 
         @Column(name = "post_id")

@@ -3,8 +3,10 @@ package com.synapse.study.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.type.SqlTypes;
 
 import java.util.Set;
 import java.util.UUID;
@@ -24,6 +26,7 @@ public class User extends BaseSoftDeleteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", updatable = false, nullable = false)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     UUID id;
 
     @Column(name = "username", unique = true, nullable = false, length = 50)

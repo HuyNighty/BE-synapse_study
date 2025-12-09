@@ -3,6 +3,8 @@ package com.synapse.study.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -46,6 +48,7 @@ public class UserRole {
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class UserRoleKey implements Serializable {
         @Column(name = "user_id")
+        @JdbcTypeCode(SqlTypes.VARCHAR)
         UUID userId;
 
         @Column(name = "role_id")

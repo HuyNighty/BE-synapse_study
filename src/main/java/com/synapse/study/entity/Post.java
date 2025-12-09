@@ -5,8 +5,10 @@ import com.synapse.study.enums.PostType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -66,6 +68,7 @@ public class Post extends BaseSoftDeleteEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     User user;
 
     @ManyToOne(fetch = FetchType.LAZY)

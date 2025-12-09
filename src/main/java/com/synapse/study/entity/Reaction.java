@@ -4,6 +4,8 @@ import com.synapse.study.enums.ReactionType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 
 @Entity
@@ -28,6 +30,7 @@ public class Reaction extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
