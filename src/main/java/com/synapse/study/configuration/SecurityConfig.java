@@ -36,6 +36,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
+    CustomJwtDecoder customJwtDecoder;
 
     @NonFinal
     @Value("${spring.web.cors.allowed-origins:http://localhost:5173,http://localhost:3000}")
@@ -47,8 +48,8 @@ public class SecurityConfig {
 
     String[] PUBLIC_ENDPOINTS = {
             "/api/auth/login",
-            "/api/auth/register",
             "/api/auth/refresh",
+            "/api/auth/introspect",
             "/api/auth/logout",
             "/api/categories/**",
             "/uploads/**",
@@ -75,7 +76,7 @@ public class SecurityConfig {
 
                 .oauth2ResourceServer(oauth2 -> oauth2
                                 .jwt(jwtConfigurer -> jwtConfigurer
-                                        .decoder(jwtDecoder())
+                                        .decoder(customJwtDecoder)
                                         .jwtAuthenticationConverter(jwtAuthenticationConverter())
                                 )
                         .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
@@ -87,15 +88,6 @@ public class SecurityConfig {
     }
 
     @Bean
-    JwtDecoder jwtDecoder() {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(SIGNER_KEY.getBytes(), "HmacSHA512");
-        return NimbusJwtDecoder
-                .withSecretKey(secretKeySpec)
-                .macAlgorithm(MacAlgorithm.HS512)
-                .build();
-    }
-
-    @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
@@ -103,11 +95,6 @@ public class SecurityConfig {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return jwtAuthenticationConverter;
-    }
-
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
     }
 
     @Bean

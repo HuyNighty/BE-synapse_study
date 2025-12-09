@@ -1,9 +1,7 @@
 package com.synapse.study.dto.response;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.io.Serializable;
+import java.util.Set;
 import java.util.UUID;
 
 public record UserResponse(
@@ -12,5 +10,6 @@ public record UserResponse(
         String email,
         String firstName,
         String lastName,
-        Boolean isActive
+        Boolean isActive,
+        Set<String> roles
 ) implements Serializable {}
