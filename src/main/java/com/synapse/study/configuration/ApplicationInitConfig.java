@@ -36,34 +36,17 @@ public class ApplicationInitConfig {
             Role userRoleDef = roleRepository.findByName("USER")
                     .orElseGet(() -> roleRepository.save(Role.builder().name("USER").description("Standard User").build()));
 
-            Map<String, String> permissionsMap = new HashMap<>();
-
-            permissionsMap.put("USER_READ", "Xem danh sách người dùng");
-            permissionsMap.put("USER_DELETE", "Xóa người dùng");
-
-            permissionsMap.put("CATEGORY_CREATE", "Tạo danh mục");
-            permissionsMap.put("CATEGORY_DELETE", "Xóa danh mục");
-            permissionsMap.put("POST_CREATE", "Đăng bài viết");
-            permissionsMap.put("POST_DELETE", "Xóa bài viết");
-
-            permissionsMap.put("COMMENT_CREATE", "Bình luận");
-            permissionsMap.put("COMMENT_DELETE", "Xóa bình luận");
-
-            permissionsMap.put("ROLE_CREATE", "Tạo vai trò mới");
-            permissionsMap.put("PERMISSION_CREATE", "Tạo quyền mới");
-            permissionsMap.put("ASSET_CREATE", "Upload file");
-
-            List<Permission> allPermissions = new ArrayList<>();
-            permissionsMap.forEach((name, desc) -> {
-                Permission perm = permissionRepository.findByName(name)
-                        .orElseGet(() -> permissionRepository.save(Permission.builder().name(name).description(desc).build()));
-                allPermissions.add(perm);
-            });
-
+            List<Permission> allPermissions = getPermissions(permissionRepository);
 
             assignPermissionsToRole(adminRole, allPermissions, rolePermissionRepository);
 
-            List<String> userPermNames = List.of("POST_CREATE", "COMMENT_CREATE", "ASSET_CREATE");
+            List<String> userPermNames = List.of(
+                    "POST_CREATE", "POST_UPDATE", 
+                    "COMMENT_CREATE",
+                    "ASSET_CREATE", "ASSET_UPDATE", "ASSET_DELETE", 
+                    "REACTION_CREATE", "BOOKMARK_CREATE"
+            );
+
             List<Permission> userPermissions = allPermissions.stream()
                     .filter(p -> userPermNames.contains(p.getName()))
                     .toList();
@@ -96,6 +79,48 @@ public class ApplicationInitConfig {
                 categoryRepository.save(Category.builder().name("ReactJS").slug("reactjs").description("Frontend").build());
             }
         };
+    }
+
+    private static List<Permission> getPermissions(PermissionRepository permissionRepository) {
+        Map<String, String> permissionsMap = new HashMap<>();
+
+        // User
+        permissionsMap.put("USER_READ", "Xem danh sách người dùng");
+        permissionsMap.put("USER_DELETE", "Xóa người dùng");
+
+        // Category
+        permissionsMap.put("CATEGORY_CREATE", "Tạo danh mục");
+        permissionsMap.put("CATEGORY_DELETE", "Xóa danh mục");
+
+        // Post
+        permissionsMap.put("POST_CREATE", "Đăng bài viết");
+        permissionsMap.put("POST_UPDATE", "Cập nhật bài viết");
+        permissionsMap.put("POST_DELETE", "Xóa bài viết");
+
+        // Comment
+        permissionsMap.put("COMMENT_CREATE", "Bình luận");
+        permissionsMap.put("COMMENT_DELETE", "Xóa bình luận");
+
+        // System
+        permissionsMap.put("ROLE_CREATE", "Tạo vai trò mới");
+        permissionsMap.put("PERMISSION_CREATE", "Tạo quyền mới");
+
+        // Asset (File)
+        permissionsMap.put("ASSET_CREATE", "Upload file");
+        permissionsMap.put("ASSET_UPDATE", "Cập nhật file");
+        permissionsMap.put("ASSET_DELETE", "Xóa file");
+
+        // Interaction
+        permissionsMap.put("REACTION_CREATE", "Thả cảm xúc");
+        permissionsMap.put("BOOKMARK_CREATE", "Lưu bài viết");
+
+        List<Permission> allPermissions = new ArrayList<>();
+        permissionsMap.forEach((name, desc) -> {
+            Permission perm = permissionRepository.findByName(name)
+                    .orElseGet(() -> permissionRepository.save(Permission.builder().name(name).description(desc).build()));
+            allPermissions.add(perm);
+        });
+        return allPermissions;
     }
 
     private void assignPermissionsToRole(Role role, List<Permission> permissions, RolePermissionRepository repo) {

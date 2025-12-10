@@ -21,6 +21,7 @@ public enum ErrorCode {
     CATEGORY_NOT_FOUND(1010, "Category not found", HttpStatus.NOT_FOUND),
     SLUG_EXISTED(1011, "Slug existed", HttpStatus.BAD_REQUEST),
     POST_NOT_FOUND(1012, "Post not found", HttpStatus.NOT_FOUND),
+    ASSET_NOT_FOUND(1013, "Asset not found", HttpStatus.NOT_FOUND),
     ;
 
     ErrorCode(int code, String message, HttpStatus httpStatusCode) {

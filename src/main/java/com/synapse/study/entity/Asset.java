@@ -34,4 +34,9 @@ public class Asset extends BaseEntity {
 
     @Column(name = "file_size")
     Long fileSize;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    User user;
 }
