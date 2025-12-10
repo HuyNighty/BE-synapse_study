@@ -18,6 +18,8 @@ public enum ErrorCode {
     UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
     TOKEN_INVALID(1008, "Token is invalid or expired", HttpStatus.UNAUTHORIZED),
     TOKEN_REVOKED(1009, "Token has been revoked", HttpStatus.UNAUTHORIZED),
+    CATEGORY_NOT_FOUND(1010, "Category not found", HttpStatus.NOT_FOUND),
+    SLUG_EXISTED(1011, "Slug existed", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatus httpStatusCode) {
