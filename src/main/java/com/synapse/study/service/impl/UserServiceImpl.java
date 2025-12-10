@@ -35,6 +35,7 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 
+    @Override
     @Transactional
     public UserResponse createUser(UserCreationRequest request) {
 
@@ -63,9 +64,12 @@ public class UserServiceImpl implements UserService {
 
         userRoleRepository.save(userRole);
 
+        savedUser.getUserRoles().add(userRole);
+
         return userMapper.toUserResponse(savedUser);
     }
 
+    @Override
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String userId = context.getAuthentication().getName();

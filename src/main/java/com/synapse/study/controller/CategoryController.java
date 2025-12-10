@@ -16,12 +16,12 @@ import java.util.List;
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@PreAuthorize("hasRole('ADMIN')")
 public class CategoryController {
 
     CategoryService categoryService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('CATEGORY_CREATE')")
     ApiResponse<CategoryResponse> create(@RequestBody CategoryRequest request) {
         return ApiResponse.<CategoryResponse>builder()
                 .result(categoryService.create(request))

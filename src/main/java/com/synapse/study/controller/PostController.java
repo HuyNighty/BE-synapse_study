@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class PostController {
     PostService postService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('POST_CREATE')")
     ApiResponse<PostResponse> create(@RequestBody @Valid PostCreationRequest request) {
         return ApiResponse.<PostResponse>builder()
                 .result(postService.createPost(request))
@@ -31,6 +33,13 @@ public class PostController {
     ApiResponse<List<PostResponse>> getAll() {
         return ApiResponse.<List<PostResponse>>builder()
                 .result(postService.getAllPosts())
+                .build();
+    }
+
+    @GetMapping("/{slug}")
+    ApiResponse<PostResponse> getPostBySlug(@PathVariable String slug) {
+        return ApiResponse.<PostResponse>builder()
+                .result(postService.getPostBySlug(slug))
                 .build();
     }
 }

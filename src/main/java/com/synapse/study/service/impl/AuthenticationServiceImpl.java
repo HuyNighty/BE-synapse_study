@@ -181,7 +181,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if (!CollectionUtils.isEmpty(user.getUserRoles()))
             user.getUserRoles().forEach(userRole -> {
-                stringJoiner.add(userRole.getRole().getName());
+                stringJoiner.add("ROLE_" + userRole.getRole().getName());
                 if (!CollectionUtils.isEmpty(userRole.getRole().getRolePermissions())) {
                     userRole.getRole().getRolePermissions().forEach(rolePermission -> {
                         stringJoiner.add(rolePermission.getPermission().getName());

@@ -25,6 +25,7 @@ public class Comment extends BaseSoftDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     UUID id;
 
     @Column(name = "content", nullable = false, columnDefinition = "TEXT")

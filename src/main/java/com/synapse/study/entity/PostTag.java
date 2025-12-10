@@ -3,6 +3,8 @@ package com.synapse.study.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -37,6 +39,7 @@ public class PostTag {
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class PostTagKey implements Serializable {
         @Column(name = "post_id")
+        @JdbcTypeCode(SqlTypes.VARCHAR)
         UUID postId;
 
         @Column(name = "tag_id")

@@ -20,6 +20,7 @@ public enum ErrorCode {
     TOKEN_REVOKED(1009, "Token has been revoked", HttpStatus.UNAUTHORIZED),
     CATEGORY_NOT_FOUND(1010, "Category not found", HttpStatus.NOT_FOUND),
     SLUG_EXISTED(1011, "Slug existed", HttpStatus.BAD_REQUEST),
+    POST_NOT_FOUND(1012, "Post not found", HttpStatus.NOT_FOUND),
     ;
 
     ErrorCode(int code, String message, HttpStatus httpStatusCode) {

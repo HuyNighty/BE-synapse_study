@@ -28,6 +28,7 @@ public class Post extends BaseSoftDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     UUID id;
 
     @Column(name = "title", nullable = false)

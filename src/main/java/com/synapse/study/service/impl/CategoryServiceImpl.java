@@ -48,6 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .toList();
     }
 
+    @Override
     public String toSlug(String input) {
         if (input == null) return "";
 

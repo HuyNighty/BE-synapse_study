@@ -31,6 +31,18 @@ public class PostServiceImpl implements PostService {
     PostMapper postMapper;
     CategoryService categoryService;
 
+    @Override
+    public PostResponse getPostBySlug(String slug) {
+        Post post = postRepository.findBySlug(slug)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+
+        post.setViewCount(post.getViewCount() + 1);
+        postRepository.save(post);
+
+        return postMapper.toPostResponse(post);
+    }
+
+    @Override
     @Transactional
     public PostResponse createPost(PostCreationRequest request) {
         var context = SecurityContextHolder.getContext();
@@ -60,6 +72,7 @@ public class PostServiceImpl implements PostService {
         return postMapper.toPostResponse(postRepository.save(post));
     }
 
+    @Override
     public List<PostResponse> getAllPosts() {
         return postRepository.findAll().stream()
                 .map(postMapper::toPostResponse)

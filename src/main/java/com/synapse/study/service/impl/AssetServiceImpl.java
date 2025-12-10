@@ -32,6 +32,7 @@ public class AssetServiceImpl implements AssetService {
     @Value("${app.upload-dir:./uploads}")
     String UPLOAD_DIR;
 
+    @Override
     @Transactional
     public Asset uploadFile(MultipartFile file) {
         try {

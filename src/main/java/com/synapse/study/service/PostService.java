@@ -9,4 +9,5 @@ public interface PostService {
 
     PostResponse createPost(PostCreationRequest request);
     List<PostResponse> getAllPosts();
+    PostResponse getPostBySlug(String slug);
 }
