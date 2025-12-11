@@ -1,10 +1,13 @@
 package com.synapse.study.service;
 
 import com.synapse.study.dto.request.RoleRequest;
+import com.synapse.study.dto.response.PermissionResponse;
 import com.synapse.study.dto.response.RoleResponse;
 import com.synapse.study.entity.Permission;
 import com.synapse.study.entity.Role;
 import com.synapse.study.entity.RolePermission;
+import com.synapse.study.enums.ErrorCode;
+import com.synapse.study.exception.AppException;
 import com.synapse.study.mapper.PermissionMapper;
 import com.synapse.study.mapper.RoleMapper;
 import com.synapse.study.repository.PermissionRepository;
@@ -27,6 +30,17 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl implements RoleService {
 
     RoleRepository roleRepository;
+
+    @Override
+    public Set<PermissionResponse> getPermissionsByRole(String roleName) {
+        Role role = roleRepository.findByName(roleName)
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+
+        return role.getRolePermissions().stream()
+                .map(rp -> permissionMapper.toPermissionResponse(rp.getPermission()))
+                .collect(Collectors.toSet());
+    }
+
     PermissionRepository permissionRepository;
     RolePermissionRepository rolePermissionRepository;
     RoleMapper roleMapper;

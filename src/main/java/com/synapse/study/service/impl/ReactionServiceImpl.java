@@ -10,6 +10,7 @@ import com.synapse.study.exception.AppException;
 import com.synapse.study.repository.PostRepository;
 import com.synapse.study.repository.ReactionRepository;
 import com.synapse.study.repository.UserRepository;
+import com.synapse.study.utils.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -29,13 +30,12 @@ public class ReactionServiceImpl implements ReactionService {
     PostRepository postRepository;
     UserRepository userRepository;
 
+    SecurityUtils securityUtils;
+
     @Override
     @Transactional
     public ReactionResponse react(ReactionRequest request) {
-        var context = SecurityContextHolder.getContext();
-        String userId = context.getAuthentication().getName();
-        User user = userRepository.findById(UUID.fromString(userId))
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = securityUtils.getCurrentUser();
 
         Post post = postRepository.findById(request.postId())
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));

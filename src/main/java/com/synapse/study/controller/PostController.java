@@ -1,6 +1,7 @@
 package com.synapse.study.controller;
 
 import com.synapse.study.dto.request.PostCreationRequest;
+import com.synapse.study.dto.request.PostUpdateRequest;
 import com.synapse.study.dto.response.ApiResponse;
 import com.synapse.study.dto.response.PostResponse;
 import com.synapse.study.service.PostService;
@@ -8,10 +9,14 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -30,9 +35,13 @@ public class PostController {
     }
 
     @GetMapping
-    ApiResponse<List<PostResponse>> getAll() {
-        return ApiResponse.<List<PostResponse>>builder()
-                .result(postService.getAllPosts())
+    ApiResponse<Page<PostResponse>> getAll(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt").descending());
+        return ApiResponse.<Page<PostResponse>>builder()
+                .result(postService.getAllPosts(pageable))
                 .build();
     }
 
@@ -41,5 +50,31 @@ public class PostController {
         return ApiResponse.<PostResponse>builder()
                 .result(postService.getPostBySlug(slug))
                 .build();
+    }
+
+    @GetMapping("/my-posts")
+    ApiResponse<Page<PostResponse>> getMyPosts(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt").descending());
+        return ApiResponse.<Page<PostResponse>>builder()
+                .result(postService.getMyPosts(pageable))
+                .build();
+    }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('POST_UPDATE')")
+    ApiResponse<PostResponse> update(@PathVariable UUID id, @RequestBody PostUpdateRequest request) {
+        return ApiResponse.<PostResponse>builder()
+                .result(postService.updatePost(id, request))
+                .build();
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('POST_DELETE')")
+    ApiResponse<String> delete(@PathVariable UUID id) {
+        postService.deletePost(id);
+        return ApiResponse.<String>builder().result("Post deleted successfully").build();
     }
 }

@@ -2,6 +2,8 @@ package com.synapse.study.repository;
 
 import com.synapse.study.entity.Asset;
 import com.synapse.study.entity.Post;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -18,4 +20,6 @@ public interface PostRepository extends JpaRepository<Post, UUID>, JpaSpecificat
     boolean existsBySlug(String slug);
 
     List<Post> findByThumbnail(Asset thumbnail);
+
+    Page<Post> findByUserIdOrderByCreatedAtDesc(UUID userId, Pageable pageable);
 }

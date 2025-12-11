@@ -49,8 +49,8 @@ public class AssetServiceImpl implements AssetService {
     public Asset uploadFile(MultipartFile file) {
         String newFileName = storeFileToDisk(file);
 
-
         String originalFilename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+
         var context = SecurityContextHolder.getContext();
         String userId = context.getAuthentication().getName();
         User currentUser = userRepository.findById(UUID.fromString(userId))

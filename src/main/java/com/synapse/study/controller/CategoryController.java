@@ -34,4 +34,19 @@ public class CategoryController {
                 .result(categoryService.getAll())
                 .build();
     }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('CATEGORY_UPDATE')")
+    ApiResponse<CategoryResponse> update(@PathVariable Long id, @RequestBody CategoryRequest request) {
+        return ApiResponse.<CategoryResponse>builder()
+                .result(categoryService.update(id, request))
+                .build();
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('CATEGORY_DELETE')")
+    ApiResponse<String> delete(@PathVariable Long id) {
+        categoryService.delete(id);
+        return ApiResponse.<String>builder().result("Category deleted").build();
+    }
 }

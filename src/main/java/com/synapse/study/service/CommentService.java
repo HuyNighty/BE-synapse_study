@@ -10,4 +10,7 @@ public interface CommentService {
 
     CommentResponse createComment(CommentRequest request);
     List<CommentResponse> getCommentsByPost(UUID postId, int page, int size);
+    void deleteComment(UUID commentId);
+    CommentResponse updateComment(UUID commentId, CommentRequest request);
+    List<CommentResponse> getReplies(UUID commentId, int page, int size);
 }

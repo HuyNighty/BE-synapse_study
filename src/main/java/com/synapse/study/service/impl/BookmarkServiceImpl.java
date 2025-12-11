@@ -1,16 +1,20 @@
 package com.synapse.study.service;
 
+import com.synapse.study.dto.response.PostResponse;
 import com.synapse.study.entity.Bookmark;
 import com.synapse.study.entity.Post;
 import com.synapse.study.entity.User;
 import com.synapse.study.enums.ErrorCode;
 import com.synapse.study.exception.AppException;
+import com.synapse.study.mapper.PostMapper;
 import com.synapse.study.repository.BookmarkRepository;
 import com.synapse.study.repository.PostRepository;
 import com.synapse.study.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +29,8 @@ public class BookmarkServiceImpl implements BookmarkService {
     BookmarkRepository bookmarkRepository;
     PostRepository postRepository;
     UserRepository userRepository;
+
+    PostMapper postMapper;
 
     @Override
     @Transactional
@@ -51,5 +57,14 @@ public class BookmarkServiceImpl implements BookmarkService {
             bookmarkRepository.save(bookmark);
             return "Bookmarked";
         }
+    }
+
+    @Override
+    public Page<PostResponse> getMyBookmarks(Pageable pageable) {
+        var context = SecurityContextHolder.getContext();
+        String userId = context.getAuthentication().getName();
+
+        Page<Bookmark> bookmarks = bookmarkRepository.findByUserIdOrderByCreatedAtDesc(UUID.fromString(userId), pageable);
+        return bookmarks.map(bookmark -> postMapper.toPostResponse(bookmark.getPost()));
     }
 }

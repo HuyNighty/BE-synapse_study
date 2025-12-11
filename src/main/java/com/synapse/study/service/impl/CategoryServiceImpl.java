@@ -49,6 +49,28 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public CategoryResponse update(Long id, CategoryRequest request) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+
+        categoryMapper.updateCategory(category, request);
+
+        if (request.name() != null && !request.name().isEmpty()) {
+            category.setSlug(toSlug(request.name()));
+        }
+
+        return categoryMapper.toCategoryResponse(categoryRepository.save(category));
+    }
+
+    @Override
+    public void delete(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
+        }
+        categoryRepository.deleteById(id);
+    }
+
+    @Override
     public String toSlug(String input) {
         if (input == null) return "";
 

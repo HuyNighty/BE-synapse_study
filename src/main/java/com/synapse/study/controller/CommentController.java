@@ -40,4 +40,32 @@ public class CommentController {
                 .result(commentService.getCommentsByPost(postId, page, size))
                 .build();
     }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('COMMENT_UPDATE')")
+    ApiResponse<CommentResponse> update(@PathVariable UUID id, @RequestBody CommentRequest request) {
+        return ApiResponse.<CommentResponse>builder()
+                .result(commentService.updateComment(id, request))
+                .build();
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('COMMENT_DELETE')")
+    ApiResponse<String> delete(@PathVariable UUID id) {
+        commentService.deleteComment(id);
+        return ApiResponse.<String>builder()
+                .result("Comment deleted successfully")
+                .build();
+    }
+
+    @GetMapping("/{commentId}/replies")
+    ApiResponse<List<CommentResponse>> getReplies(
+            @PathVariable UUID commentId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ApiResponse.<List<CommentResponse>>builder()
+                .result(commentService.getReplies(commentId, page, size))
+                .build();
+    }
 }

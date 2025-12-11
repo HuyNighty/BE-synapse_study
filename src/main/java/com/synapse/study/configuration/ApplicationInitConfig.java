@@ -42,9 +42,10 @@ public class ApplicationInitConfig {
 
             List<String> userPermNames = List.of(
                     "POST_CREATE", "POST_UPDATE", 
-                    "COMMENT_CREATE",
+                    "COMMENT_CREATE", "COMMENT_UPDATE",
                     "ASSET_CREATE", "ASSET_UPDATE", "ASSET_DELETE", 
-                    "REACTION_CREATE", "BOOKMARK_CREATE"
+                    "REACTION_CREATE",
+                    "BOOKMARK_CREATE"
             );
 
             List<Permission> userPermissions = allPermissions.stream()
@@ -91,6 +92,7 @@ public class ApplicationInitConfig {
         // Category
         permissionsMap.put("CATEGORY_CREATE", "Tạo danh mục");
         permissionsMap.put("CATEGORY_DELETE", "Xóa danh mục");
+        permissionsMap.put("CATEGORY_UPDATE", "Cập nhật danh mục");
 
         // Post
         permissionsMap.put("POST_CREATE", "Đăng bài viết");
@@ -100,6 +102,7 @@ public class ApplicationInitConfig {
         // Comment
         permissionsMap.put("COMMENT_CREATE", "Bình luận");
         permissionsMap.put("COMMENT_DELETE", "Xóa bình luận");
+        permissionsMap.put("COMMENT_UPDATE", "Cập nhật bình luận");
 
         // System
         permissionsMap.put("ROLE_CREATE", "Tạo vai trò mới");
@@ -113,6 +116,14 @@ public class ApplicationInitConfig {
         // Interaction
         permissionsMap.put("REACTION_CREATE", "Thả cảm xúc");
         permissionsMap.put("BOOKMARK_CREATE", "Lưu bài viết");
+
+        // Permission
+        permissionsMap.put("PERMISSION_READ", "Xem danh sách quyền");
+        permissionsMap.put("PERMISSION_UPDATE", "Cập nhật quyền");
+        permissionsMap.put("PERMISSION_DELETE", "Xóa quyền");
+
+        // Role
+        permissionsMap.put("ROLE_READ", "Xem thông tin vai trò");
 
         List<Permission> allPermissions = new ArrayList<>();
         permissionsMap.forEach((name, desc) -> {

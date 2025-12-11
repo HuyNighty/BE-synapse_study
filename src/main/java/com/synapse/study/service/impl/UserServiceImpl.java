@@ -12,6 +12,7 @@ import com.synapse.study.repository.RoleRepository;
 import com.synapse.study.repository.UserRepository;
 import com.synapse.study.repository.UserRoleRepository;
 import com.synapse.study.service.UserService;
+import com.synapse.study.utils.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -34,6 +35,8 @@ public class UserServiceImpl implements UserService {
     UserRoleRepository userRoleRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
+
+    SecurityUtils securityUtils;
 
     @Override
     @Transactional
@@ -71,11 +74,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse getMyInfo() {
-        var context = SecurityContextHolder.getContext();
-        String userId = context.getAuthentication().getName();
-
-        User user = userRepository.findById(UUID.fromString(userId))
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = securityUtils.getCurrentUser();
 
         return userMapper.toUserResponse(user);
     }

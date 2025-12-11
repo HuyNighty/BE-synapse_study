@@ -3,8 +3,7 @@ package com.synapse.study.mapper;
 import com.synapse.study.dto.request.CommentRequest;
 import com.synapse.study.dto.response.CommentResponse;
 import com.synapse.study.entity.Comment;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class})
 public interface CommentMapper {
@@ -18,4 +17,14 @@ public interface CommentMapper {
     Comment toComment(CommentRequest request);
 
     CommentResponse toCommentResponse(Comment comment);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "post", ignore = true)
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "parent", ignore = true)
+    @Mapping(target = "replies", ignore = true)
+    @Mapping(target = "isHidden", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    void updateComment(@MappingTarget Comment comment, CommentRequest request);
 }

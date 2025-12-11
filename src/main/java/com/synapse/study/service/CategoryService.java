@@ -10,4 +10,6 @@ public interface CategoryService {
     CategoryResponse create(CategoryRequest request);
     String toSlug(String input);
     List<CategoryResponse> getAll();
+    CategoryResponse update(Long id, CategoryRequest request);
+    void delete(Long id);
 }

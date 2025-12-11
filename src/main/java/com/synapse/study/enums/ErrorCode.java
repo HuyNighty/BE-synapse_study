@@ -22,6 +22,10 @@ public enum ErrorCode {
     SLUG_EXISTED(1011, "Slug existed", HttpStatus.BAD_REQUEST),
     POST_NOT_FOUND(1012, "Post not found", HttpStatus.NOT_FOUND),
     ASSET_NOT_FOUND(1013, "Asset not found", HttpStatus.NOT_FOUND),
+    COMMENT_NOT_FOUND(1014, "Comment not found", HttpStatus.NOT_FOUND),
+    PERMISSION_NOT_FOUND(1015, "Permission not found", HttpStatus.NOT_FOUND),
+    ROLE_NOT_FOUND(1016, "Role not found", HttpStatus.NOT_FOUND),
+    THUMBNAIL_NOT_FOUND(1017, "Thumbnail not found", HttpStatus.NOT_FOUND),
     ;
 
     ErrorCode(int code, String message, HttpStatus httpStatusCode) {
