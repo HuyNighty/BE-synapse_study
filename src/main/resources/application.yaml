@@ -1,0 +1,50 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /synapse
+
+spring:
+  datasource:
+    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/synapse_v1}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DBMS_USERNAME}
+    password: ${DBMS_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+      format_sql: true
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+  web:
+    resources:
+      static-locations: file:./uploads/
+  mvc:
+    static-path-pattern: /uploads/**
+
+app:
+  cors:
+    allowed-origins: "http://localhost:5173,http://localhost:3000"
+
+jwt:
+  signerKey: "..."
+  validDuration: 36000 #in second
+  refreshableDuration: 604800 #in second
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
+    com.synapse.study: DEBUG
